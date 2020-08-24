@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+</html>
+<script>
+  function cloneUseMap(target, map = new Map()) {
+          console.log(map);
+  if (typeof target === 'object') {
+      let cloneTarget = Array.isArray(target) ? [] : {};
+      if (map.get(target)) {
+          return map.get(target);  //
+      }
+      map.set(target, cloneTarget);
+      for (const key in target) {
+          cloneTarget[key] = cloneUseMap(target[key], map);
+      }
+      return cloneTarget;
+  } else {
+      return target;
+  }
+};
+let obj = {
+  id:1,
+  arr: [1,2,45,7]
+}
+obj.souce = obj;   //当obj的内容当中存在嵌套时方法会报错，递归栈溢出
+let newObj = cloneUseMap(obj)
+console.log(newObj);
+</script>
