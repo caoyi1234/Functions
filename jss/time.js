@@ -1,14 +1,16 @@
+// 获取三个月之前的时间毫秒数与当前时间的标准格式
 function getTime(type) {
   if (type === 'start') {
-    return new Date().getTime() - 3600 * 1000 * 24 * 90
+    return new Date().getTime() - 3600 * 1000 * 24 * 90    //毫秒数
   } else {
-    return new Date(new Date().toDateString())
+    // new Date().toDateString() ==> "Fri May 21 2021"
+    return new Date(new Date().toDateString())   //2020-08-20T16:00:00.000Z
   }
 }
-console.log(getTime()); //2020-08-20T16:00:00.000Z
-console.log(getTime('start')); //毫秒数
 
 
+
+// 格式化时间
 function parseTime(time, pattern) {
 	if (arguments.length === 0 || !time) {
 		return null
@@ -46,3 +48,55 @@ function parseTime(time, pattern) {
 	})
 	return time_str
 }
+
+
+
+// 一天之内的某时某分转化为毫秒数
+function coversionTimeToSecond(str){
+  return str.split(':')[0]*3600+str.split(':')[1]*60;
+}
+
+
+
+// 一天之内的毫秒数转化为某时某分
+function coversionTimeToHour(str){
+  var str2 = parseInt((str%3600)/60);
+  if(str2<10){
+    str2='0'+str2;
+  }
+  var str3 = Math.floor((str/3600));
+  if(str3<10){
+    str3='0'+str3;
+  }
+  return str3+':'+str2
+}
+
+// 将由"-"连接的时间转化为new Date()可识别的以"/"连接的字符串
+function coversionToDate(value){
+  let t = parseTime(value, "{y}-{m}-{d}");
+  let str = t.replace("/-/g",'/')
+  let dt = new Date(str);
+  return dt;
+}
+
+// 获取过去一年之内的几个月前的时间,依赖parseTime
+function filterPreMonth(date,count){
+
+  if(parseInt(count) >= 12||parseInt(count)<1) return false
+  let timeStr = parseTime(date,'{y}-{m}-{d}')
+  let timeArr = timeStr.split('-');
+  let str;
+  parseInt(timeArr[1])-count>0 ?
+    str = ''+timeArr[0]+'-'+
+      ((parseInt(timeArr[1])-count)>9?parseInt(timeArr[1])-count:'0'+parseInt(timeArr[1])-count)
+      +'-'+timeArr[2]:
+    (
+      str = ''+(parseInt(timeArr[0])-1)+'-'+
+      (12+(parseInt(timeArr[1])-count)>9?12+(parseInt(timeArr[1])-count):'0'+(12+(parseInt(timeArr[1])-count)))
+      +'-'+timeArr[2]
+    )
+  return str
+}
+
+console.log(getTime('start'));
+console.log(getTime(12));
