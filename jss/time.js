@@ -97,6 +97,3 @@ function filterPreMonth(date,count){
     )
   return str
 }
-
-console.log(getTime('start'));
-console.log(getTime(12));
